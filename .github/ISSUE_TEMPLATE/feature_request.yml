@@ -1,0 +1,40 @@
+name: Feature request
+description: Suggest an improvement or a new capability
+title: "[feat]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What are you trying to do that this project cannot do today?
+      placeholder: I want to alert when an aircraft descends below 2000 ft inside a box...
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: What should happen, ideally including CLI/config syntax
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Workarounds, other tools, or designs you rejected
+  - type: dropdown
+    id: decoder
+    attributes:
+      label: Does this depend on decoder-specific behaviour?
+      options:
+        - "No — works with aircraft.json only"
+        - "dump1090-fa specific"
+        - "readsb specific"
+        - "Requires Beast/SBS raw ports"
+  - type: checkboxes
+    id: contributing
+    attributes:
+      label: Contribution
+      options:
+        - label: I am willing to open a PR for this
