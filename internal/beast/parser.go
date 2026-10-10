@@ -91,21 +91,21 @@ func (p *Parser) Feed(b []byte) []Segment {
 				cut--
 			}
 			if cut > 0 {
-				out = append(out, Segment{Raw: p.take(0, cut)})
+				out = append(out, Segment{Raw: p.take(cut)})
 			}
 			break
 		}
 		if idx > 0 {
-			out = append(out, Segment{Raw: p.take(0, idx)})
+			out = append(out, Segment{Raw: p.take(idx)})
 		}
 		// A candidate now sits at offset 0.
 		plen, _ := payloadLenFor(p.pending[1])
 		end, complete, malformed := frameWireLen(p.pending[2:], mlatLen+signalLen+plen)
 		switch {
 		case complete:
-			out = append(out, Segment{Raw: p.take(0, headerLen+end), IsFrame: true})
+			out = append(out, Segment{Raw: p.take(headerLen + end), IsFrame: true})
 		case malformed:
-			out = append(out, Segment{Raw: p.take(0, headerLen+end), IsFrame: true})
+			out = append(out, Segment{Raw: p.take(headerLen + end), IsFrame: true})
 		default: // incomplete: wait for more bytes
 			return out
 		}
@@ -113,10 +113,10 @@ func (p *Parser) Feed(b []byte) []Segment {
 	return out
 }
 
-// take removes n bytes at offset i from the buffer and returns a copy of
+// take removes the first n bytes from the buffer and returns a copy of
 // them.
-func (p *Parser) take(i, n int) []byte {
-	out := append([]byte(nil), p.pending[i:i+n]...)
-	p.pending = append(p.pending[:i], p.pending[i+n:]...)
+func (p *Parser) take(n int) []byte {
+	out := append([]byte(nil), p.pending[:n]...)
+	p.pending = p.pending[n:]
 	return out
 }

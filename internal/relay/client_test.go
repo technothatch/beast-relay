@@ -90,7 +90,9 @@ func TestClientBackpressureDropsOldest(t *testing.T) {
 	// Chunks keep their order (drops only ever remove the oldest), so the
 	// fill byte must strictly increase from one chunk to the next.
 	want := total - dropped
-	remote.SetReadDeadline(time.Now().Add(5 * time.Second))
+	if err := remote.SetReadDeadline(time.Now().Add(5 * time.Second)); err != nil {
+		t.Fatalf("setting read deadline: %v", err)
+	}
 	buf := make([]byte, want)
 	if _, err := io.ReadFull(remote, buf); err != nil {
 		t.Fatalf("reading %d bytes: %v", want, err)
